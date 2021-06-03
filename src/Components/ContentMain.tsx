@@ -53,69 +53,69 @@ const ContentMain: React.FC = () => {
                 <div className={clases.content}>
                     <div className={clases.toolbar}>Toolbar Main</div>
                     <Switch>
-                        <Route path='/inicio'>
+                        <Route path='inicio'>
                             <Home />
                         </Route>
-                        <Route path='/login'>
+                        <Route path='login'>
                             {!isLogged && <><NavbarLogin />
                                 <Login /></>}
                             {isLogged && <Home/>}
                         </Route>
-                        <Route path='/personal-campo'>
+                        <Route path='personal-campo'>
                         {!isLogged && <><NavbarLogin />
                                 <Login /></>}
                             {isLogged && <PersonalCampo />}
                             
                         </Route>
-                        <Route path='/usuario'>
+                        <Route path='usuario'>
                         {!isLogged && <><NavbarLogin />
                                 <Login /></>}
                             {isLogged && <Usuario />}
                             
                         </Route>
-                        <Route path='/transmisiones'>
+                        <Route path='transmisiones'>
                         {!isLogged && <><NavbarLogin />
                                 <Login /></>}
                             {isLogged && <StreamingPreview />}
                             
                         </Route>
-                        <Route path='/videos'>
+                        <Route path='videos'>
                         {!isLogged && <><NavbarLogin />
                                 <Login /></>}
                             {isLogged && <VideoPreview />}
                             
                         </Route>
-                        <Route path='/categoria'>
+                        <Route path='categoria'>
                         {!isLogged && <><NavbarLogin />
                                 <Login /></>}
                             {isLogged &&  <Clasificacion />}
                            
                         </Route>
-                        <Route path='/tipo'>
+                        <Route path='tipo'>
                         {!isLogged && <><NavbarLogin />
                                 <Login /></>}
                             {isLogged &&  <Tipo />}
                             
                         </Route>
-                        <Route path='/incidencias'>
+                        <Route path='incidencias'>
                         {!isLogged && <><NavbarLogin />
                                 <Login /></>}
                             {isLogged &&  <Incidencias />}
                             
                         </Route>
-                        <Route path='/subtipo'>
+                        <Route path='subtipo'>
                         {!isLogged && <><NavbarLogin />
                                 <Login /></>}
                             {isLogged &&   <SubTipo />}
                            
                         </Route>
-                        <Route path='/tipo-accion'>
+                        <Route path='tipo-accion'>
                         {!isLogged && <><NavbarLogin />
                                 <Login /></>}
                             {isLogged &&  <TipoAccion />}
                             
                         </Route>
-                        <Route path='/'>
+                        <Route path=''>
                         {!isLogged && <><NavbarLogin />
                                 <Login /></>}
                             {isLogged && <Home/>}
