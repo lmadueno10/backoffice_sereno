@@ -120,10 +120,10 @@ const PersonalCampo: React.FC = () => {
         e.preventDefault();
         if (personal.id_personal > 0) {
             console.log("Actualizando...");
-            dispatch(updatePersonal({ codigo: personal.codigo, dni: personal.dni, nombres_apellidos: personal.nombres_apellidos, celular: personal.celular, sector: personal.sector, usuario: personal.usuario, contrasenia: (personal.contrasenia ? personal.contrasenia : undefined), id_supervisor: (personal.id_supervisor ? personal.id_supervisor : undefined),id_usuario:personal.id_usuario,EMEI:personal.emei }, personal.id_personal));
+            dispatch(updatePersonal({ codigo: personal.codigo, dni: personal.dni, nombres_apellidos: personal.nombres_apellidos, celular: personal.celular, sector: personal.sector, usuario: personal.usuario, contrasenia: (personal.contrasenia ? personal.contrasenia : undefined), id_supervisor: (personal.id_supervisor ? personal.id_supervisor : undefined),id_usuario:personal.id_usuario,emei:personal.emei }, personal.id_personal));
             setOpen(false);
         } else {
-            dispatch(createPersonal({ codigo: personal.codigo, dni: personal.dni, nombres_apellidos: personal.nombres_apellidos, celular: personal.celular, sector: personal.sector, usuario: personal.usuario, contrasenia: (personal.contrasenia ? personal.contrasenia : undefined), id_supervisor: (personal.id_supervisor ? personal.id_supervisor : undefined),EMEI:personal.emei }));
+            dispatch(createPersonal({ codigo: personal.codigo, dni: personal.dni, nombres_apellidos: personal.nombres_apellidos, celular: personal.celular, sector: personal.sector, usuario: personal.usuario, contrasenia: (personal.contrasenia ? personal.contrasenia : undefined), id_supervisor: (personal.id_supervisor ? personal.id_supervisor : undefined),emei:personal.emei }));
             setOpen(false);
         }
     }
