@@ -213,7 +213,7 @@ const TipoAccion: React.FC = () => {
 
                                     <TextField className={classes.inputText} label="Descripción" name="nombre_accion" onChange={onCHangeValue} variant="outlined"
                                         value={tipoAccion.nombre_accion}
-                                        style={{ minWidth: 150 }}
+                                        style={{ minWidth: 250 }}
                                         InputProps={{ startAdornment: (<InputAdornment position="start"> <ListAlt /></InputAdornment>), }} />
     
                                 </Grid>

@@ -14,7 +14,7 @@ import { Ballot, Book, Check, Delete, Edit, ListAlt, PlusOne } from '@material-u
 import InputAdornment from '@material-ui/core/InputAdornment';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteSubtipoIncidencia, fetchAllTipo, getAllSubtipoIncidencia, saveSubtipoIncidencia, updateSubtipoInidencia } from 'redux/actions/subtipoincidenciaActions';
+import { deleteSubtipoIncidencia, fetchAllClasificacion, fetchAllTipo, fetchTipoIncidenciaByClasificaion, getAllSubtipoIncidencia, saveSubtipoIncidencia, updateSubtipoInidencia } from 'redux/actions/subtipoincidenciaActions';
 const useStyles = makeStyles((theme: Theme) => ({
 
     root: {
@@ -50,65 +50,77 @@ const SubTipo: React.FC = () => {
     const classes = useStyles();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    
-    const subtipoNuevo = { multitabla_id: 0,sigla:null,valor:'',estado:'A',padre_id:0}
+
+    const subtipoNuevo = { multitabla_id: 0, sigla: null, valor: '', estado: 'A', padre_id: 0 }
     const result = useSelector((other: any) => other.subtipoIncidenciaReducer);
     const r: any = result.data;
     const rows = r ? r.data : [];
 
     const [subtipoIncidente, setSubtipoIncidente] = React.useState(subtipoNuevo);
     const [open, setOpen] = React.useState(false);
-
-    const newSubtipoIncidente=()=>{
+    const [idClasificacion, setIdClasificacion] = React.useState("");
+    const newSubtipoIncidente = () => {
         setSubtipoIncidente(subtipoNuevo);
         setOpen(true);
+        setIdClasificacion("");
     }
-    
-    const dispatch=useDispatch();
+    const dispatch = useDispatch();
 
-    const saveTipoIncident=()=>{
-        if(subtipoIncidente.multitabla_id>0){
-            const s={sigla:subtipoIncidente.sigla,valor:subtipoIncidente.valor,padre_id:subtipoIncidente.padre_id,estado:subtipoIncidente.estado};
-            dispatch(updateSubtipoInidencia(s,subtipoIncidente.multitabla_id));
+    const onChangeIdClasificacion = (e: any) => {
+        dispatch(fetchTipoIncidenciaByClasificaion(e.target.value));
+        setIdClasificacion(e.target.value);
+    }
+    const saveTipoIncident = () => {
+        if (subtipoIncidente.multitabla_id > 0) {
+            const s = { sigla: subtipoIncidente.sigla, valor: subtipoIncidente.valor, padre_id: subtipoIncidente.padre_id, estado: subtipoIncidente.estado };
+            dispatch(updateSubtipoInidencia(s, subtipoIncidente.multitabla_id));
             setOpen(false);
-        }else{
-            const s={sigla:subtipoIncidente.sigla,valor:subtipoIncidente.valor,padre_id:subtipoIncidente.padre_id};
+        } else {
+            const s = { sigla: subtipoIncidente.sigla, valor: subtipoIncidente.valor, padre_id: subtipoIncidente.padre_id };
             dispatch(saveSubtipoIncidencia(s))
             setOpen(false);
 
         }
     }
 
-    const [subtipoIncidenteDel,setsubtipoIncidenteDel]=useState({
-        multitabla_id:0,
-        valor:''
+    const [subtipoIncidenteDel, setsubtipoIncidenteDel] = useState({
+        multitabla_id: 0,
+        valor: ''
     });
 
-    const selectSubtipoIncidenteDel=(t:any)=>{
+    const selectSubtipoIncidenteDel = (t: any) => {
         setsubtipoIncidenteDel(t);
         setOpenDel(true);
         dispatch(fetchAllTipo());
     }
 
-    const [openDel,setOpenDel]=useState(false);
+    const [openDel, setOpenDel] = useState(false);
 
-    const cancelDel=()=>{
+    const cancelDel = () => {
         setOpenDel(false);
     }
 
-    const delTipoIncident=()=>{
+    const delTipoIncident = () => {
         dispatch(deleteSubtipoIncidencia(subtipoIncidenteDel.multitabla_id));
         setOpenDel(false);
     }
 
-    const onCHangeValue=(e:any)=>{
+    const onCHangeValue = (e: any) => {
+        if (e.target.name == 'padre_id') {
+            if (!idClasificacion){
+                setIdClasificacion(e.target.getAttribute('label'));
+                alert(e.target.getAttribute('label'));
+            }
+        }
         setSubtipoIncidente({
             ...subtipoIncidente,
-            [e.target.name]:e.target.value
+            [e.target.name]: e.target.value
         })
     }
 
-    const selectSubtipoIncidente=(subtipoIncidente:any)=>{
+    const selectSubtipoIncidente = (subtipoIncidente: any) => {
+        setIdClasificacion("");
+        dispatch(fetchTipoIncidenciaByClasificaion(""));
         setSubtipoIncidente(subtipoIncidente);
         setOpen(true);
     }
@@ -125,23 +137,21 @@ const SubTipo: React.FC = () => {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(getAllSubtipoIncidencia());
-        dispatch(fetchAllTipo());
-    },[])
+        dispatch(fetchAllClasificacion());
+        //dispatch(fetchAllTipo());
+    }, [])
     return (
         <Paper className={classes.root}>
-            <Typography style={{ display: 'flex', alignItems: 'center' ,marginLeft:15 }} variant='h5'>
+            <Typography style={{ display: 'flex', alignItems: 'center', marginLeft: 15 }} variant='h5'>
                 <Book /> Subtipo de incidencia.
         </Typography>
             <div className={classes.searchUuser}>
-                <div style={{ flexGrow: 1, display:'flex' }}>
-                    <TextField id="search-input" placeholder='Buscar por nombre' style={{flexGrow:1}} />
-                    <IconButton type="submit" className={classes.iconButton} aria-label="Buscar">
-                        <SearchIcon />
-                    </IconButton>
+                <div style={{ flexGrow: 1, display: 'flex' }}>
+                    
                 </div>
-                <Button style={{ marginRight: 25 }} variant="contained"  onClick={newSubtipoIncidente}>
+                <Button style={{ marginRight: 25 }} variant="contained" onClick={newSubtipoIncidente}>
                     Agregar <PlusOne />
                 </Button>
             </div>
@@ -167,32 +177,32 @@ const SubTipo: React.FC = () => {
                             <TableCell >
                                 <Typography >Acciones</Typography>
                             </TableCell>
-                        </TableRow>                            
+                        </TableRow>
                     </TableHead>
                     <TableBody>
                         {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: any) => {
                             return (
                                 <TableRow hover role="checkbox" tabIndex={-1} key={row.multitabla_id}>
                                     <TableCell >
-                                    {row.multitabla_id}
-                                </TableCell>
-                                <TableCell >
-                                    {row.valor}
-                                </TableCell>
-                                <TableCell >
-                                    {row.sigla}
-                                </TableCell>
-                                <TableCell >
-                                    {row.tipo}
-                                </TableCell>
-                                <TableCell >
-                                    {row.estado}
-                                </TableCell>
+                                        {row.multitabla_id}
+                                    </TableCell>
+                                    <TableCell >
+                                        {row.valor}
+                                    </TableCell>
+                                    <TableCell >
+                                        {row.sigla}
+                                    </TableCell>
+                                    <TableCell >
+                                        {row.tipo}
+                                    </TableCell>
+                                    <TableCell >
+                                        {row.estado}
+                                    </TableCell>
                                     <TableCell>
-                                        <Button color='primary' onClick={()=>selectSubtipoIncidente(row)}>
+                                        <Button color='primary' onClick={() => selectSubtipoIncidente(row)}>
                                             <Edit />
                                         </Button>
-                                        <Button color='secondary' onClick={()=>selectSubtipoIncidenteDel(row)} >
+                                        <Button color='secondary' onClick={() => selectSubtipoIncidenteDel(row)} >
                                             <Delete />
                                         </Button>
                                     </TableCell>
@@ -202,17 +212,17 @@ const SubTipo: React.FC = () => {
                     </TableBody>
                 </Table>
                 <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
-                component="div"
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-                labelRowsPerPage={'Filas por página'}
-            />
+                    rowsPerPageOptions={[10, 25, 100]}
+                    component="div"
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    labelRowsPerPage={'Filas por página'}
+                />
             </TableContainer>
-            
+
             <div>
                 <Dialog
                     open={open}
@@ -224,12 +234,12 @@ const SubTipo: React.FC = () => {
         </DialogTitle>
                     <DialogContent>
                         <Paper >
-                        <Grid container item justify='space-between' style={{padding:10}}>    
-                            <Grid sm={6}>
-                            <TextField className={classes.inputText} label="Descripción" name="valor" onChange={onCHangeValue} variant="outlined"
+                            <Grid container item justify='space-between' style={{ padding: 10 }}>
+                                <Grid sm={6}>
+                                    <TextField className={classes.inputText} label="Descripción" name="valor" onChange={onCHangeValue} variant="outlined"
                                         value={subtipoIncidente.valor}
                                         InputProps={{ startAdornment: (<InputAdornment position="start"> <ListAlt /></InputAdornment>), }} />
-    
+
 
                                     <TextField className={classes.inputText} label="Sigla" name="sigla" onChange={onCHangeValue} variant="outlined"
                                         value={subtipoIncidente.sigla}
@@ -237,28 +247,48 @@ const SubTipo: React.FC = () => {
                                     <TextField className={classes.inputText} label="# Estado" name="estado" onChange={onCHangeValue} variant="outlined"
                                         value={subtipoIncidente.estado}
                                         InputProps={{ startAdornment: (<InputAdornment position="start"> <Check /></InputAdornment>), }} />
-                                 <TextField
-                                    margin='dense'
-                                    label='Clasificación'
-                                    name="padre_id"
-                                    onChange={onCHangeValue}
-                                    select
-                                    style={{minWidth:242}}
-                                    SelectProps={{
-                                        native: true,
-                                    }}
-                                    value={subtipoIncidente.padre_id}
-                                    variant='outlined'
-                                >
-                                     <option value="0">Selecione...</option>
-                                    {result.tipo?result.tipo.map((c:any)=>{
-                                        return <option key={c.multitabla_id} value={c.multitabla_id}>{c.valor}</option>
-                                    }):<></>}
-                                    
-                                </TextField>
-                               
+
+                                    <TextField
+                                        margin='dense'
+                                        label='Clasificación'
+                                        name="idClasificacion"
+                                        onChange={onChangeIdClasificacion}
+                                        select
+                                        style={{ minWidth: 242 }}
+                                        SelectProps={{
+                                            native: true,
+                                        }}
+                                        value={idClasificacion}
+                                        variant='outlined'
+                                    >
+                                        <option value="0">Selecione...</option>
+                                        {result.clasificacion ? result.clasificacion.map((c: any) => {
+                                            return <option key={c.multitabla_id} value={c.multitabla_id}>{c.valor}</option>
+                                        }) : <></>}
+
+                                    </TextField>
+                                    <TextField
+                                        margin='dense'
+                                        label='Tipo incidencia'
+                                        name="padre_id"
+                                        onChange={onCHangeValue}
+                                        select
+                                        style={{ minWidth: 242 }}
+                                        SelectProps={{
+                                            native: true,
+                                        }}
+                                        value={subtipoIncidente.padre_id}
+                                        variant='outlined'
+                                    >
+                                        <option value="0">Selecione...</option>
+                                        {result.tipoFilter ? result.tipoFilter.map((c: any) => {
+                                            return <option key={c.multitabla_id} value={c.multitabla_id} aria-label={c.padre_id}>{c.valor}</option>
+                                        }) : <></>}
+
+                                    </TextField>
+
+                                </Grid>
                             </Grid>
-                        </Grid>
                         </Paper>
                     </DialogContent>
                     <DialogActions>

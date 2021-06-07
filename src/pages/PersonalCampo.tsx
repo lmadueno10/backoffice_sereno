@@ -22,7 +22,8 @@ import StreetviewIcon from '@material-ui/icons/Streetview';
 import PersonIcon from '@material-ui/icons/Person';
 import LockIcon from '@material-ui/icons/Lock';
 import { useDispatch, useSelector } from 'react-redux';
-import { createPersonal, deletePersonal, getAllPersonal, updatePersonal } from 'redux/actions/personalcampoActions';
+import { createPersonal, deletePersonal, getAllPersonal, getAllPersonalByFilter, updatePersonal } from 'redux/actions/personalcampoActions';
+import { getAllUsuarioByFilter } from 'redux/actions/usuariosActions';
 
 const useStyles = makeStyles((theme: Theme) => ({
 
@@ -66,6 +67,7 @@ const PersonalCampo: React.FC = () => {
 
     const showLoader = result.isLoading;
     const [personal, setPersonal] = React.useState(personalNuevo);
+    const [filtro,setFiltro]=React.useState("");
 
     const dispatch = useDispatch();
 
@@ -132,9 +134,12 @@ const PersonalCampo: React.FC = () => {
         dispatch(deletePersonal(personalSeleccionado.id_personal));
         setOpenDel(false);
     }
+    const onClickSearc=()=>{
+        dispatch(getAllPersonalByFilter(filtro));
+    }
 
     useEffect(() => {
-        dispatch(getAllPersonal());
+        dispatch(getAllPersonalByFilter(filtro));
     }, []);
     return (
         <Paper className={classes.root}>
@@ -146,8 +151,9 @@ const PersonalCampo: React.FC = () => {
         </Typography>
             <div className={classes.searchUuser}>
                 <div style={{ flexGrow: 1, display: 'flex' }}>
-                    <TextField style={{ flexGrow: 1 }} id="search-input" placeholder='Buscar personal por nombre' />
-                    <IconButton type="submit" className={classes.iconButton} aria-label="Buscar">
+                    <TextField name="filtro" onChange={(e:any)=>{setFiltro(e.target.value)}} style={{ flexGrow: 1 }} id="search-input" placeholder='Buscar personal por nombre'
+                    value={filtro} />
+                    <IconButton  className={classes.iconButton} aria-label="Buscar" onClick={onClickSearc}>
                         <SearchIcon />
                     </IconButton>
                 </div>
@@ -175,7 +181,7 @@ const PersonalCampo: React.FC = () => {
                                 <Typography >Celular</Typography>
                             </TableCell>
                             <TableCell style={{ minWidth: 100 }}>
-                                <Typography >Supervisor</Typography>
+                                <Typography >Usuario</Typography>
                             </TableCell>
                             <TableCell style={{ minWidth: 100 }}>
                                 <Typography >EMEI</Typography>
@@ -205,7 +211,7 @@ const PersonalCampo: React.FC = () => {
                                         <Typography >{row.celular}</Typography>
                                     </TableCell>
                                     <TableCell >
-                                        <Typography >{row.id_supervisor}</Typography>
+                                        <Typography >{row.usuario}</Typography>
                                     </TableCell>
                                     <TableCell >
                                         <Typography >{row.emei}</Typography>
@@ -257,9 +263,14 @@ const PersonalCampo: React.FC = () => {
 
                                     </Grid>
                                     <Grid item sm={6}>
-                                        <TextField className={classes.inputText} id="userSupervisor" label="Supervisor" name="id_supervisor" onChange={onChangeEvent} variant="outlined"
-                                            value={personal.id_supervisor}
-                                            InputProps={{ startAdornment: (<InputAdornment position="start"> <SupervisedUserCircleIcon /></InputAdornment>), }} />
+                                        <TextField className={classes.inputText} id="userSupervisor" label="Supervisor" name="id_supervisor" onChange={onChangeEvent} select 
+                                        SelectProps={{native:true,}} style={{minWidth:242}} variant="outlined" value={personal.id_supervisor}
+                                            InputProps={{ startAdornment: (<InputAdornment position="start"> <SupervisedUserCircleIcon /></InputAdornment>), }}>
+                                                <option value="">Selecione...</option>
+                                                {rows?rows.map((u:any)=>{
+                                                    return <option key={u.usuario} value={u.id_usuario}>{u.nombres_apellidos}</option>
+                                                }):<></>}
+                                            </TextField>
                                         <TextField className={classes.inputText} id="userAsignament" label="Sector" name="sector" onChange={onChangeEvent} required variant="outlined"
                                             value={personal.sector}
                                             InputProps={{ startAdornment: (<InputAdornment position="start"> <StreetviewIcon /></InputAdornment>), }} />

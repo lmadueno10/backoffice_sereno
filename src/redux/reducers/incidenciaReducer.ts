@@ -1,4 +1,4 @@
-import { SHOW_LOADING, LOADING_INCIDENTS, INCIDENTS_SUCCESS, INCIDENTS_ERROR, CLASIFICACION_ERROR, CLASIFICACION_SUCCESS, TIPO_SUCCES, SUBTIPO_SUCCESS, PERSONAL_CAMPO_SUCCESS, INCIDENT_SAVED, FILTER_INCIDENTS_BY_ESTADO } from "redux/actions/types";
+import { SHOW_LOADING, LOADING_INCIDENTS, INCIDENTS_SUCCESS, INCIDENTS_ERROR, CLASIFICACION_ERROR, CLASIFICACION_SUCCESS, TIPO_SUCCES, SUBTIPO_SUCCESS, PERSONAL_CAMPO_SUCCESS, INCIDENT_SAVED, FILTER_INCIDENTS_BY_ESTADO, FILTER_TIPO_BY_CLASIFICACION, FILTER_SUBTIPO_BY_TIPO } from "redux/actions/types";
 
 
 const incidenciaReducer = (state = { isLoading: false, data: null }, action: any) => {
@@ -26,6 +26,18 @@ const incidenciaReducer = (state = { isLoading: false, data: null }, action: any
                 isLoading:false,
                 data:action.payload
             }
+            case FILTER_TIPO_BY_CLASIFICACION:
+                return{
+                    ...state,
+                    isLoading:false,
+                    tipoFilter:action.payload.data
+                }
+                case FILTER_SUBTIPO_BY_TIPO:
+                    return{
+                        ...state,
+                        isLoading:false,
+                        subtipoFilter:action.payload.data
+                    }
         case INCIDENT_SAVED:
             return {
                 ...state,

@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField } from "@material-ui/core";
 import { FC, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllClasificacion, getAllPersonalCampo, getAllSubTipoIncidencias, getAllTipoIncidencia, saveIncident, updateIncident } from "redux/actions/incidenciaActions";
+import { filterSubtipoByTipo, filterTipoByClasificacion, getAllClasificacion, getAllPersonalCampo, getAllSubTipoIncidencias, getAllTipoIncidencia, saveIncident, updateIncident } from "redux/actions/incidenciaActions";
 
 const IncidenciaDialog: FC<any> = (props: any) => {
 
@@ -15,6 +15,14 @@ const IncidenciaDialog: FC<any> = (props: any) => {
             ...incident,
             [e.target.name]: e.target.value
         })
+        if(e.target.name=='id_clasificacion'){
+            dispatch(filterTipoByClasificacion(e.target.value));
+            console.log("TIPO_FILTER:",result.tipoFilter)
+        }
+        if(e.target.name=='id_tipo'){
+            dispatch(filterSubtipoByTipo(e.target.value));
+            console.log("SUBTIPO_FILTER",result.subtipoFilter);
+        }
     }
     const saveInidencia=()=>{
         
@@ -40,8 +48,9 @@ const IncidenciaDialog: FC<any> = (props: any) => {
         console.log("Incidencia state",result);
         useEffect(()=>{
             dispatch(getAllClasificacion());
-            dispatch(getAllTipoIncidencia());
-            dispatch(getAllSubTipoIncidencias());
+            //dispatch(getAllTipoIncidencia());
+            //dispatch(getAllSubTipoIncidencias());
+            
             dispatch(getAllPersonalCampo());    
         },[props.open]);
         return (
@@ -116,7 +125,7 @@ const IncidenciaDialog: FC<any> = (props: any) => {
                                     variant='outlined'
                                 >
                                      <option value="0">Selecione...</option>
-                                     {result.tipo?result.tipo.map((t:any)=>{
+                                     {result.tipoFilter?result.tipoFilter.map((t:any)=>{
                                         return <option key={t.multitabla_id} value={t.multitabla_id}>{t.valor}</option>
                                     }):<></>}
                                     
@@ -147,7 +156,7 @@ const IncidenciaDialog: FC<any> = (props: any) => {
                                     variant='outlined'
                                 >
                                      <option value="0">Selecione...</option>
-                                    {result.subtipo?result.subtipo.map((st:any)=>{
+                                    {result.subtipoFilter?result.subtipoFilter.map((st:any)=>{
                                         return <option key={st.multitabla_id} value={st.multitabla_id}>{st.valor}</option>
                                     }):<></>}
                                 </TextField>

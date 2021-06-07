@@ -3,7 +3,7 @@ import { Add, Edit, GraphicEq, Image, Videocam } from "@material-ui/icons";
 import IncidenciaDialog from "Components/IncidenciaDialog";
 import { FC, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { filterByEstado, filterIncidents, getAllIncidents} from "redux/actions/incidenciaActions";
+import { filterByEstado, filterIncidents, filterSubtipoByTipo, filterTipoByClasificacion, getAllIncidents} from "redux/actions/incidenciaActions";
 import {BASE_MEDIA} from "constants/global";
 const Incidencias: FC = (props:any) => {
     const estados=["Inactivo","Pendiente","Atendido"];
@@ -52,6 +52,10 @@ const Incidencias: FC = (props:any) => {
     }
 
     const selectIncident = (ev: any, incidenciaSel: any) => {
+
+        console.log("filtro:",incidenciaSel.id_clasificacion,incidenciaSel.id_tipo);
+        dispatch(filterTipoByClasificacion(incidenciaSel.id_clasificacion));
+        dispatch(filterSubtipoByTipo(incidenciaSel.id_tipo));
         setIncident(incidenciaSel);
 
         setDialogStatus({ open: true })

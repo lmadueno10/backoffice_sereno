@@ -144,10 +144,7 @@ const Clasificacion: React.FC = () => {
         </Typography>
             <div className={classes.searchUuser}>
                 <div style={{ flexGrow: 1, display:'flex'}}>
-                    <TextField id="search-input" placeholder='Buscar por nombre' style={{flexGrow:1}} />
-                    <IconButton type='submit' className={classes.iconButton} aria-label='Buscar'>
-                        <SearchIcon />
-                    </IconButton>
+                    
                 </div>
                 <Button style={{ marginRight: 25 }} variant="contained" onClick={newClasificacion}>
                     Agregar <PlusOne />

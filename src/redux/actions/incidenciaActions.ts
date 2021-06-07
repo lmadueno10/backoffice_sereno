@@ -3,7 +3,7 @@ import { IncidenciaService } from "services/incidenciasService";
 import { PersonalCampoService } from "services/personalCampoService";
 import { SubtipoIncidenciaService } from "services/subtipoIncidenciaService";
 import { TipoInidenciaService } from "services/tipoIncidenciaService";
-import { CLASIFICACION_ERROR, CLASIFICACION_SUCCESS, FILTER_INCIDENTS_BY_ESTADO, INCIDENTS_ERROR, INCIDENTS_SUCCESS, INCIDENT_SAVED, INCIDENT_UPDATED, PERSONAL_CAMPO_ERROR, PERSONAL_CAMPO_LOADING, PERSONAL_CAMPO_SUCCESS, SHOW_LOADING, SUBTIPO_SUCCESS, TIPO_SUCCES } from "./types";
+import { CLASIFICACION_ERROR, CLASIFICACION_SUCCESS, FILTER_INCIDENTS_BY_ESTADO, FILTER_SUBTIPO_BY_TIPO, FILTER_TIPO_BY_CLASIFICACION, INCIDENTS_ERROR, INCIDENTS_SUCCESS, INCIDENT_SAVED, INCIDENT_UPDATED, PERSONAL_CAMPO_ERROR, PERSONAL_CAMPO_LOADING, PERSONAL_CAMPO_SUCCESS, SHOW_LOADING, SUBTIPO_SUCCESS, TIPO_SUCCES } from "./types";
 import socket from "socketio";
 export const getAllIncidents = () => {
     return (dispatch: any) => {
@@ -43,6 +43,48 @@ export const getAllTipoIncidencia = () => {
         ts.findAll().then((data: any) => {
             if (data) {
                 dispatch({ type: TIPO_SUCCES, payload: data });
+            } else {
+                dispatch({ type: CLASIFICACION_ERROR });
+            }
+        }).catch(err => {
+            dispatch({ type: CLASIFICACION_ERROR });
+        })
+    }
+}
+
+export const filterTipoByClasificacion=(filtro:any)=>{
+        return (dispatch:any)=>{
+            const ts = new TipoInidenciaService('tipo', '');
+            ts.findAll().then((data: any) => {
+                if (data) {
+                    let tipoListFilter = data.data.filter((t: any) => {
+                        if (t.padre_id==filtro) {
+                            return t;
+                        }
+
+                    });
+                    dispatch({ type: FILTER_TIPO_BY_CLASIFICACION, payload: { data: tipoListFilter } });
+                } else {
+                    dispatch({ type: CLASIFICACION_ERROR });
+                }
+            }).catch(err => {
+                dispatch({ type: CLASIFICACION_ERROR });
+            })
+        }
+}
+
+export const filterSubtipoByTipo=(filtro:any)=>{
+    return (dispatch:any)=>{
+        const ss = new SubtipoIncidenciaService('subtipo', '');
+        ss.findAll().then((data:any) => {
+            if (data) {
+                let subtipoListFilter = data.data.filter((s: any) => {
+                    if (s.padre_id==filtro) {
+                        return s;
+                    }
+
+                });
+                dispatch({ type: FILTER_SUBTIPO_BY_TIPO, payload: { data: subtipoListFilter } });
             } else {
                 dispatch({ type: CLASIFICACION_ERROR });
             }

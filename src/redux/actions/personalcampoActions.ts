@@ -17,6 +17,31 @@ export const getAllPersonal = ()=>{
     }
 }
 
+export const getAllPersonalByFilter = (filtro:any)=>{
+    return (dispatch:any)=>{
+        const ps= new PersonalCampoService('personal-campo','');
+        dispatch({type:PERSONAL_CAMPO_LOADING})
+        ps.findAll().then((data:any)=>{
+            if(data){
+                if (filtro) {
+                    let usuariosFilter = data.data.filter((u: any) => {
+                        if (u.nombres_apellidos.toLowerCase().includes(filtro.toLowerCase())) {
+                            return u;
+                        }
+                    });
+                    dispatch({ type: PERSONAL_CAMPO_SUCCESS, payload: { data: usuariosFilter } });
+                }else{
+                    dispatch({ type: PERSONAL_CAMPO_SUCCESS, payload: data}); 
+                }
+            }else{
+                dispatch({type:PERSONAL_CAMPO_ERROR});
+            }
+        }).catch(err=>{
+            dispatch({type: PERSONAL_CAMPO_ERROR});
+        })
+    }
+}
+
 export const updatePersonal = (personal:any,personalId:number)=>{
     return (dispatch:any)=>{
         const ps= new PersonalCampoService('personal-campo','');
