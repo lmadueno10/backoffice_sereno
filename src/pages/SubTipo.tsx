@@ -160,7 +160,7 @@ const SubTipo: React.FC = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>
-                                <Typography >Código</Typography>
+                                <Typography >#</Typography>
                             </TableCell>
                             <TableCell >
                                 <Typography >Descripción</Typography>
