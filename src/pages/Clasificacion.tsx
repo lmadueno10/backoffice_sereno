@@ -155,7 +155,7 @@ const Clasificacion: React.FC = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>
-                                <Typography >Código</Typography>
+                                <Typography >#</Typography>
                             </TableCell>
                             <TableCell >
                                 <Typography >Descripción</Typography>
@@ -172,11 +172,11 @@ const Clasificacion: React.FC = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows?rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: any) => {
+                        {rows?rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: any,index:number) => {
                             return (
                                 <TableRow hover role="checkbox" tabIndex={-1} key={row.multitabla_id}>
                                     <TableCell >
-                                    {row.multitabla_id}
+                                    {index+1}
                                 </TableCell>
                                 <TableCell >
                                     {row.valor}

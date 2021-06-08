@@ -137,7 +137,7 @@ const TipoAccion: React.FC = () => {
             </div>
             </div>
             <Typography style={{ display: 'flex', alignItems: 'center',marginLeft:15 }} variant='h5'>
-                <Book />Tipo Acciones.
+                <Book />Tipo acciones.
         </Typography>
             <div className={classes.searchUuser}>
                 <div style={{ flexGrow: 1, display:'flex'}}>
@@ -152,7 +152,7 @@ const TipoAccion: React.FC = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>
-                                <Typography >Código</Typography>
+                                <Typography >#</Typography>
                             </TableCell>
                             <TableCell >
                                 <Typography >Descripción</Typography>
@@ -163,11 +163,11 @@ const TipoAccion: React.FC = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows?rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: any) => {
+                        {rows?rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: any,index:number) => {
                             return (
                                 <TableRow hover role="checkbox" tabIndex={-1} key={row.multitabla_id}>
                                     <TableCell >
-                                    {row.id_tipo_accion}
+                                    {index+1}
                                 </TableCell>
                                 <TableCell >
                                     {row.nombre_accion}
