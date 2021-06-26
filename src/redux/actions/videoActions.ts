@@ -5,6 +5,7 @@ import { PERSONAL_CAMPO_SUCCESS, VIDEO_ERROR, VIDEO_LOADING, VIDEO_SUCCES } from
 export const getAllVideo = (filter:any)=>{
     return (dispatch:any)=>{
         const vs= new VideoService('video','');
+        dispatch({ type: VIDEO_LOADING })
         vs.findAllFilter(filter).then(data=>{
             if(data){
                 dispatch({type:VIDEO_SUCCES,payload:data});
