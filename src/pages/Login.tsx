@@ -7,6 +7,7 @@ import { signInAction, showLoadingAction } from 'redux/actions';
 import store from "redux/store";
 import { singIn } from '../services/loginService';
 import { useHistory } from 'react-router';
+import brand from '../img/logo_brand.png';
 const Login: React.FC = () => {
     const dispatch = useDispatch()
     const [usuario, setUsuario] = useState({
@@ -60,6 +61,7 @@ const Login: React.FC = () => {
                     <ProgressBar display={isOpen ? 'block' : 'none'} />
                 </div>
                 <form onSubmit={logIn} style={{ display: 'flex', flexDirection: 'column', maxWidth: 500, minWidth: 300, }}>
+                <div style={{backgroundImage:`url(${brand})`,backgroundSize:'95%',height:150}}></div>
 
                     <Typography style={{ textAlign: 'center', fontWeight: 'bolder', marginBottom: 15 }} variant='h5' >
                         Inicio de sesión
@@ -70,7 +72,7 @@ const Login: React.FC = () => {
                     <TextField autoFocus name='usuario' required label='Usuario' margin='normal' onKeyUp={handleChange} variant='outlined' InputProps={{ startAdornment: (<InputAdornment position='start'><AccountCircle /> </InputAdornment>) }} />
                     <TextField name='contrasenia' required label='Contraseña' margin='normal' type='password' onKeyUp={handleChange} variant='outlined' InputProps={{ startAdornment: (<InputAdornment position='start'><LockRounded /> </InputAdornment>) }} />
                     <FormControlLabel control={<Checkbox name="checkedB" color="primary" checked={keepLogin} onChange={(e:any)=>setKeepLogin(e.target.checked)}/>} label="Mantener sesión activa" />
-                    <div style={{ height: 20, marginTop: 15 }} >
+                    <div style={{ height: 70, marginTop: 15 }} >
                         <Button type='submit' color='primary' style={{ width: '100%' }} variant='contained'>Iniciar sesión</Button>
                     </div>
                     <Snackbar message="Usuario o contraseña incorrecta" onClose={()=>{setShowSnackbar({...showSnackbar,open:false})}} open={showSnackbar.open}  TransitionComponent={showSnackbar.Transition} />
