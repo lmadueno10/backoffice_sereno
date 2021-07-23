@@ -1,5 +1,5 @@
 import { Collapse, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import { ExpandLess, ExpandMore, Home } from '@material-ui/icons';
+import { ExpandLess, ExpandMore, Home, SupervisedUserCircle } from '@material-ui/icons';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -68,7 +68,13 @@ const DrawerItems: React.FC = () => {
                             <ListItemIcon>
                                 <PeopleIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Personal de campo" />
+                            <ListItemText primary="Personal campo" />
+                        </ListItem>
+                        <ListItem button  component={Link} to='grupo' selected={selectedIndex === 10} onClick={(event:any) => handleListItemClick(event, 10)}>
+                            <ListItemIcon>
+                                <SupervisedUserCircle />
+                            </ListItemIcon>
+                            <ListItemText primary="Grupos" />
                         </ListItem>
                         <ListItem button  component={Link} to='categoria' selected={selectedIndex === 6} onClick={(event:any) => handleListItemClick(event, 6)}>
                             <ListItemIcon>

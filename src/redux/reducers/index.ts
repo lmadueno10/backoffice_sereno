@@ -10,6 +10,7 @@ import tipoincidenciaReducer from './tipoincidenciaReducer';
 import subtipoIncidenciaReducer from './subtipoinidenciaReducer';
 import tipoAccionReducer from'./tipoaccionReducers'
 import videoReducer from './videoReducer';
+import grupoReducer from './grupoReducer'
 const rootReducers= combineReducers({
     modalVideoReducer,
     signInReducer,
@@ -21,6 +22,7 @@ const rootReducers= combineReducers({
     tipoincidenciaReducer,
     tipoAccionReducer,
     subtipoIncidenciaReducer,
-    videoReducer
+    videoReducer,
+    grupoReducer
 });
 export default rootReducers;

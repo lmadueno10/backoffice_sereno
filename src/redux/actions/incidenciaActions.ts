@@ -3,8 +3,9 @@ import { IncidenciaService } from "services/incidenciasService";
 import { PersonalCampoService } from "services/personalCampoService";
 import { SubtipoIncidenciaService } from "services/subtipoIncidenciaService";
 import { TipoInidenciaService } from "services/tipoIncidenciaService";
-import { CLASIFICACION_ERROR, CLASIFICACION_SUCCESS, FILTER_INCIDENTS_BY_ESTADO, FILTER_SUBTIPO_BY_TIPO, FILTER_TIPO_BY_CLASIFICACION, INCIDENTS_ERROR, INCIDENTS_SUCCESS, INCIDENT_SAVED, INCIDENT_UPDATED, PERSONAL_CAMPO_ERROR, PERSONAL_CAMPO_LOADING, PERSONAL_CAMPO_SUCCESS, SHOW_LOADING, SUBTIPO_SUCCESS, TIPO_SUCCES } from "./types";
+import { CLASIFICACION_ERROR, CLASIFICACION_SUCCESS, FILTER_INCIDENTS_BY_ESTADO, FILTER_SUBTIPO_BY_TIPO, FILTER_TIPO_BY_CLASIFICACION, GRUPO_LOADING, GRUPO_SUCCESS, INCIDENTS_ERROR, INCIDENTS_SUCCESS, INCIDENT_SAVED, INCIDENT_UPDATED, PERSONAL_CAMPO_ERROR, PERSONAL_CAMPO_LOADING, PERSONAL_CAMPO_SUCCESS, SHOW_LOADING, SUBTIPO_SUCCESS, TIPO_SUCCES } from "./types";
 import socket from "socketio";
+import { GrupoService } from "services/grupoService";
 export const getAllIncidents = () => {
     return (dispatch: any) => {
         dispatch({ type: SHOW_LOADING });
@@ -28,6 +29,21 @@ export const getAllClasificacion = () => {
         cs.findAll().then(data => {
             if (data) {
                 dispatch({ type: CLASIFICACION_SUCCESS, payload: data });
+            } else {
+                dispatch({ type: CLASIFICACION_ERROR });
+            }
+        }).catch(err => {
+            dispatch({ type: CLASIFICACION_ERROR });
+        })
+    }
+}
+
+export const fetchGrupoPersonal = () => {
+    return (dispatch: any) => {
+        const gs = new GrupoService('grupo', '');
+        gs.findAll().then(data => {
+            if (data) {
+                dispatch({ type: GRUPO_SUCCESS, payload: data });
             } else {
                 dispatch({ type: CLASIFICACION_ERROR });
             }

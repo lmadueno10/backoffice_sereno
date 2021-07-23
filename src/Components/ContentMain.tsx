@@ -17,6 +17,8 @@ import Clasificacion from 'pages/Clasificacion';
 import Login from 'pages/Login';
 import Usuario from 'pages/Usuario';
 import TipoAccion from 'pages/TipoAccion';
+import Grupo from 'pages/grupo';
+import TransferList from 'pages/agrupar';
 
 const styleClasses = makeStyles(theme => ({
     root: {
@@ -113,6 +115,18 @@ const ContentMain: React.FC = () => {
                         {!isLogged && <><NavbarLogin />
                                 <Login /></>}
                             {isLogged &&  <TipoAccion />}
+                            
+                        </Route>
+                        <Route path='/grupo'>
+                        {!isLogged && <><NavbarLogin />
+                                <Login /></>}
+                            {isLogged &&  <Grupo />}
+                            
+                        </Route>
+                        <Route path='/test'>
+                        {!isLogged && <><NavbarLogin />
+                                <Login /></>}
+                            {isLogged &&  <TransferList />}
                             
                         </Route>
                         <Route path='/'>

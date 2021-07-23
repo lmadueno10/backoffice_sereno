@@ -38,7 +38,10 @@ const Incidencias: FC = (props:any) => {
         nro_direcion:0,
         interior :'',
         lote :'',
-        referencia:''}
+        referencia:'',
+        lat:-12.04562586204593,
+        lng:-77.04307634465705
+    }
     const [incident, setIncident] = useState(incidenciaNuevo)
     
     const newInident=()=>{
