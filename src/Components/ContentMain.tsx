@@ -7,7 +7,7 @@ import { Hidden, makeStyles } from '@material-ui/core';
 import Navbar from 'Components/Navbar';
 import DraweMenu from 'Components/DrawerMenu';
 import Tipo from 'pages/Tipo';
-import {  useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import VideoPreview from '../pages/VideoPreview';
 import SubTipo from 'pages/SubTipo';
 import StreamingPreview from 'pages/StreamingPreview';
@@ -18,7 +18,6 @@ import Login from 'pages/Login';
 import Usuario from 'pages/Usuario';
 import TipoAccion from 'pages/TipoAccion';
 import Grupo from 'pages/grupo';
-import TransferList from 'pages/agrupar';
 
 const styleClasses = makeStyles(theme => ({
     root: {
@@ -61,80 +60,64 @@ const ContentMain: React.FC = () => {
                         <Route path='/login'>
                             {!isLogged && <><NavbarLogin />
                                 <Login /></>}
-                            {isLogged && <Home/>}
+                            {isLogged && <Home />}
                         </Route>
                         <Route path='/personal-campo'>
-                        {!isLogged && <><NavbarLogin />
+                            {!isLogged && <><NavbarLogin />
                                 <Login /></>}
                             {isLogged && <PersonalCampo />}
-                            
                         </Route>
                         <Route path='/usuario'>
-                        {!isLogged && <><NavbarLogin />
+                            {!isLogged && <><NavbarLogin />
                                 <Login /></>}
                             {isLogged && <Usuario />}
-                            
                         </Route>
                         <Route path='/transmisiones'>
-                        {!isLogged && <><NavbarLogin />
+                            {!isLogged && <><NavbarLogin />
                                 <Login /></>}
                             {isLogged && <StreamingPreview />}
-                            
                         </Route>
                         <Route path='/videos'>
-                        {!isLogged && <><NavbarLogin />
+                            {!isLogged && <><NavbarLogin />
                                 <Login /></>}
                             {isLogged && <VideoPreview />}
-                            
+
                         </Route>
                         <Route path='/categoria'>
-                        {!isLogged && <><NavbarLogin />
+                            {!isLogged && <><NavbarLogin />
                                 <Login /></>}
-                            {isLogged &&  <Clasificacion />}
-                           
+                            {isLogged && <Clasificacion />}
                         </Route>
                         <Route path='/tipo'>
-                        {!isLogged && <><NavbarLogin />
+                            {!isLogged && <><NavbarLogin />
                                 <Login /></>}
-                            {isLogged &&  <Tipo />}
-                            
+                            {isLogged && <Tipo />}
                         </Route>
                         <Route path='/incidencias'>
-                        {!isLogged && <><NavbarLogin />
+                            {!isLogged && <><NavbarLogin />
                                 <Login /></>}
-                            {isLogged &&  <Incidencias />}
-                            
+                            {isLogged && <Incidencias />}
                         </Route>
                         <Route path='/subtipo'>
-                        {!isLogged && <><NavbarLogin />
+                            {!isLogged && <><NavbarLogin />
                                 <Login /></>}
-                            {isLogged &&   <SubTipo />}
-                           
+                            {isLogged && <SubTipo />}
                         </Route>
                         <Route path='/tipo-accion'>
-                        {!isLogged && <><NavbarLogin />
+                            {!isLogged && <><NavbarLogin />
                                 <Login /></>}
-                            {isLogged &&  <TipoAccion />}
-                            
+                            {isLogged && <TipoAccion />}
                         </Route>
                         <Route path='/grupo'>
-                        {!isLogged && <><NavbarLogin />
+                            {!isLogged && <><NavbarLogin />
                                 <Login /></>}
-                            {isLogged &&  <Grupo />}
-                            
-                        </Route>
-                        <Route path='/test'>
-                        {!isLogged && <><NavbarLogin />
-                                <Login /></>}
-                            {isLogged &&  <TransferList />}
-                            
+                            {isLogged && <Grupo />}
                         </Route>
                         <Route path='/'>
-                        {!isLogged && <><NavbarLogin />
+                            {!isLogged && <><NavbarLogin />
                                 <Login /></>}
-                            {isLogged && <Home/>}
+                            {isLogged && <Home />}
                         </Route>
-                        
                     </Switch></div>
             </BrowserRouter>
         </div>

@@ -40,11 +40,15 @@ const IncidenciaDialog: FC<any> = (props: any) => {
             dispatch(updateIncident(inc, incident.id_incidencia));
             props.handleClose();
         } else {
+            const strData= localStorage.getItem("data")||sessionStorage.getItem("data");
+            const data=JSON.parse(strData?strData:"{}");
+            const tmpIdUsuario=data.data.user.id_usuario;
+            alert(data.data.user.id_usuario);
             const time = new Date();
             const inc = {
                 id_sereno_asignado: incident.id_sereno_asignado, fecha: (time.getFullYear() + "-" + (time.getMonth() + 1) + "-" + time.getDate()), hora: `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`, nombre_ciudadano: incident.nombre_ciudadano, telefono_ciudadano: incident.telefono_ciudadano, id_clasificacion: incident.id_clasificacion,
                 id_tipo: incident.id_tipo, id_subtipo: incident.id_subtipo, descripcion: incident.descripcion, direccion: incident.direccion, nro_direccion: incident.nro_direccion, interior: incident.interior, lote: incident.lote, referencia: incident.referencia,
-                lat: pos.lat, lng: pos.lng,id_grupo_asignado:incident.id_grupo_asignado
+                lat: pos.lat, lng: pos.lng,id_grupo_asignado:incident.id_grupo_asignado,id_usuario:tmpIdUsuario?tmpIdUsuario:null
             };
 
             dispatch(saveIncident(inc));
