@@ -5,11 +5,14 @@ import { fetchGrupoPersonal, filterSubtipoByTipo, filterTipoByClasificacion, get
 import MapaUbicacion from './MapaUbicacion';
 import '../css/mapa.css';
 import { fetchPersonal } from "redux/actions/grupoActions";
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import iconUrl from  'leaflet/dist/images/marker-icon-2x.png';
 const IncidenciaDialog: FC<any> = (props: any) => {
 
     const dispatch = useDispatch();
     const [incident, setIncident] = useState(props.incident);
-    const [pos, setPos] = useState({ lat: incident.lat, lng: incident.lng });
+    //const [pos, setPos] = useState({ lat: incident.lat, lng: incident.lng });
     const [openPop,setOpenPop]=useState(false);
     const characterMin = 6;
     console.log("incident", props.incident)
@@ -34,8 +37,8 @@ const IncidenciaDialog: FC<any> = (props: any) => {
         if (incident.id_incidencia > 0) {
             const inc = {
                 id_sereno_asignado: incident.id_sereno_asignado, fecha: incident.fecha, hora: incident.hora, nombre_ciudadano: incident.nombre_ciudadano, telefono_ciudadano: incident.telefono_ciudadano, id_clasificacion: incident.id_clasificacion,
-                id_tipo: incident.id_tipo, id_subtipo: incident.id_subtipo, descripcion: incident.descripcion, direccion: incident.direccion, nro_direccion: incident.nro_direccion, interior: incident.interior, lote: incident.lote, referencia: incident.referencia,
-                lat: pos.lat, lng: pos.lng,id_grupo_asignado:incident.id_grupo_asignado
+                id_tipo: incident.id_tipo, id_subtipo: incident.id_subtipo, descripcion: incident.descripcion, direccion: incident.direccion, nro_direccion: incident.nro_direccion?incident.nro_direccion:undefined, interior: incident.interior, lote: incident.lote, referencia: incident.referencia,
+                lat: incident.lat, lng: incident.lng,id_grupo_asignado:incident.id_grupo_asignado
             };
             dispatch(updateIncident(inc, incident.id_incidencia));
             props.handleClose();
@@ -47,8 +50,8 @@ const IncidenciaDialog: FC<any> = (props: any) => {
             const time = new Date();
             const inc = {
                 id_sereno_asignado: incident.id_sereno_asignado, fecha: (time.getFullYear() + "-" + (time.getMonth() + 1) + "-" + time.getDate()), hora: `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`, nombre_ciudadano: incident.nombre_ciudadano, telefono_ciudadano: incident.telefono_ciudadano, id_clasificacion: incident.id_clasificacion,
-                id_tipo: incident.id_tipo, id_subtipo: incident.id_subtipo, descripcion: incident.descripcion, direccion: incident.direccion, nro_direccion: incident.nro_direccion, interior: incident.interior, lote: incident.lote, referencia: incident.referencia,
-                lat: pos.lat, lng: pos.lng,id_grupo_asignado:incident.id_grupo_asignado,id_usuario:tmpIdUsuario?tmpIdUsuario:null
+                id_tipo: incident.id_tipo, id_subtipo: incident.id_subtipo, descripcion: incident.descripcion, direccion: incident.direccion, nro_direccion: incident.nro_direccion?incident.nro_direccion:undefined, interior: incident.interior, lote: incident.lote, referencia: incident.referencia,
+                lat: incident.lat, lng: incident.lng,id_grupo_asignado:incident.id_grupo_asignado,id_usuario:tmpIdUsuario?tmpIdUsuario:null
             };
 
             dispatch(saveIncident(inc));
@@ -59,7 +62,7 @@ const IncidenciaDialog: FC<any> = (props: any) => {
         setIncident(props.incident);
         const lati = props.incident.lat;
         const longi = props.incident.lng;
-        setPos({ lat: lati, lng: longi });
+        //setPos({ lat: lati, lng: longi });
     }, [props.incident])
     useEffect(()=>{
         if(openPop){
@@ -87,7 +90,7 @@ const IncidenciaDialog: FC<any> = (props: any) => {
                 setIncident({
                     ...incident, lat: pos.lat, lng: pos.lng, direccion: data.locations[0].name
                 })
-                setPos(pos);
+                //setPos(pos);
                 //console.log(incident)
             }).catch(err => {
                 console.error(err);
@@ -142,7 +145,7 @@ const IncidenciaDialog: FC<any> = (props: any) => {
                 setIncident({
                     ...incident,
                     direccion: data.address.Match_addr,
-                    nro_direccion: data.address.AddNum ? data.address.addNum : undefined
+                    nro_direccion: data.address.AddNum ? data.address.addNum : '',lat,lng
                 })
             }).catch(err => {
                 console.error(err);
@@ -150,11 +153,42 @@ const IncidenciaDialog: FC<any> = (props: any) => {
     }
     const fetchPoint = (lat: number, lng: number) => {
         console.log(`coordenadas iniciales lat: ${incident.lat} lng: ${incident.lng}`);
-        setIncident({ ...incident, lat: lat, lng: lng });
+        //setIncident({ ...incident, lat: lat, lng: lng });
+        //setPos({lat,lng})
         fetchAddress(lat, lng);
         console.log(`nuevas coordenadas lat: ${incident.lat} lng: ${incident.lng}`);
     }
     //https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&featureTypes=&location=-77.02499897152032,-12.086986740782509
+
+
+    const defaultIcon = new L.Icon({
+        iconUrl: iconUrl,
+        iconSize: [20,30],
+      });
+
+    useEffect(() => {
+        if(props.open){
+        const map = L.map('map');
+        map.setView({lat:incident.lat,lng:incident.lng}, 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' })
+        .addTo(map);
+        const marker=L.marker({lat:incident.lat,lng:incident.lng},{icon:defaultIcon,draggable:true}).addTo(map);
+        marker.addEventListener('dragend',(e)=>{
+            const latlng=e.target.getLatLng();
+            map.setView(latlng);
+            fetchPoint(latlng.lat,latlng.lng);
+        });
+        return ()=>{
+            map.remove();
+            marker.removeEventListener('dragend');
+        }}
+    },[incident])
+
+
+
+
+
+
     return (
         <>
             <Dialog fullWidth maxWidth='lg' open={props.open} aria-labelledby='form-dialog-title'>
@@ -371,12 +405,17 @@ const IncidenciaDialog: FC<any> = (props: any) => {
 
                                     </div>
                                 </div>
-                                <MapaUbicacion pos={pos} dir={incident.direccion} incident={incident.clasificacion} fetchPoint={fetchPoint} tipo={incident.tipo} />
+                                {/*<MapaUbicacion pos={{lat:incident.lat,lng:incident.lng}} dir={incident.direccion} incident={incident.clasificacion} fetchPoint={fetchPoint} tipo={incident.tipo} />*/}
+                                <div style={{ height: '100%', width: '100%' }}>
+                                    <div id="map" className="map-container">
+
+                                    </div>
+                                </div>
                             </Grid>
                         </Grid>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={props.handleClose} color='secondary'>
+                        <Button onClick={()=>{setIncident({}); props.handleClose()}} color='secondary'>
                             Cancel
                         </Button>
                         <Button onClick={saveInidencia} color='primary'>
