@@ -2,12 +2,11 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl,
 import { FC, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchGrupoPersonal, filterSubtipoByTipo, filterTipoByClasificacion, getAllClasificacion, getAllPersonalCampo, getAllSubTipoIncidencias, getAllTipoIncidencia, saveIncident, updateIncident } from "redux/actions/incidenciaActions";
-import MapaUbicacion from './MapaUbicacion';
 import '../css/mapa.css';
-import { fetchPersonal } from "redux/actions/grupoActions";
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import iconUrl from  'leaflet/dist/images/marker-icon-2x.png';
+import MapView from "./MapView";
 const IncidenciaDialog: FC<any> = (props: any) => {
 
     const dispatch = useDispatch();
@@ -46,7 +45,7 @@ const IncidenciaDialog: FC<any> = (props: any) => {
             const strData= localStorage.getItem("data")||sessionStorage.getItem("data");
             const data=JSON.parse(strData?strData:"{}");
             const tmpIdUsuario=data.data.user.id_usuario;
-            alert(data.data.user.id_usuario);
+            //alert(data.data.user.id_usuario);
             const time = new Date();
             const inc = {
                 id_sereno_asignado: incident.id_sereno_asignado, fecha: (time.getFullYear() + "-" + (time.getMonth() + 1) + "-" + time.getDate()), hora: `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`, nombre_ciudadano: incident.nombre_ciudadano, telefono_ciudadano: incident.telefono_ciudadano, id_clasificacion: incident.id_clasificacion,
@@ -165,30 +164,6 @@ const IncidenciaDialog: FC<any> = (props: any) => {
         iconUrl: iconUrl,
         iconSize: [20,30],
       });
-
-    useEffect(() => {
-        if(props.open){
-        const map = L.map('map');
-        map.setView({lat:incident.lat,lng:incident.lng}, 15);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' })
-        .addTo(map);
-        const marker=L.marker({lat:incident.lat,lng:incident.lng},{icon:defaultIcon,draggable:true}).addTo(map);
-        marker.addEventListener('dragend',(e)=>{
-            const latlng=e.target.getLatLng();
-            map.setView(latlng);
-            fetchPoint(latlng.lat,latlng.lng);
-        });
-        return ()=>{
-            map.remove();
-            marker.removeEventListener('dragend');
-        }}
-    },[incident])
-
-
-
-
-
-
     return (
         <>
             <Dialog fullWidth maxWidth='lg' open={props.open} aria-labelledby='form-dialog-title'>
@@ -326,6 +301,7 @@ const IncidenciaDialog: FC<any> = (props: any) => {
                                 <Grid container item xs={12}>
                                     <TextField
                                         inputProps={{ tabIndex: 7 }}
+                                        id="inputDireccion"
                                         fullWidth
                                         label="Dirección"
                                         margin="dense"
@@ -405,17 +381,12 @@ const IncidenciaDialog: FC<any> = (props: any) => {
 
                                     </div>
                                 </div>
-                                {/*<MapaUbicacion pos={{lat:incident.lat,lng:incident.lng}} dir={incident.direccion} incident={incident.clasificacion} fetchPoint={fetchPoint} tipo={incident.tipo} />*/}
-                                <div style={{ height: '100%', width: '100%' }}>
-                                    <div id="map" className="map-container">
-
-                                    </div>
-                                </div>
+                                    <MapView dir={incident.direccion} incident={incident} pos={{lat:incident.lat,lng:incident.lng}} setIncident={setIncident} />
                             </Grid>
                         </Grid>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={()=>{setIncident({}); props.handleClose()}} color='secondary'>
+                        <Button onClick={()=>{props.handleClose()}} color='secondary'>
                             Cancel
                         </Button>
                         <Button onClick={saveInidencia} color='primary'>
