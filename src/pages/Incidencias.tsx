@@ -10,6 +10,9 @@ const Incidencias: FC = (props: any) => {
     const [dialogStatus, setDialogStatus] = useState({
         open: false
     })
+   
+    const [listaImages,setListaImages]=useState<string[]>([]);
+    const [listaVideos,setListaVideos]=useState<string[]>([]);
     const [opneVideo, setOpenVideo] = useState(false);
     const [openPdf, setOpenPdf] = useState(false);
     const [idPdf, setIdPdf] = useState(0);
@@ -88,7 +91,8 @@ const Incidencias: FC = (props: any) => {
     }
     const openImageDialog = (incidencia: any) => {
         setOpenImage(true);
-        setUrlMedia(`${BASE_MEDIA}${incidencia.image}`);
+        //setUrlMedia(`${BASE_MEDIA}${incidencia.image}`);
+        getListImages(incidencia.image);
         setDescripcionVideo(incidencia.descripcion);
     }
     const openImageCasoDialog = (incidencia: any) => {
@@ -98,7 +102,8 @@ const Incidencias: FC = (props: any) => {
     }
     const openVideoDialog = (incidencia: any) => {
         setOpenVideo(true);
-        setUrlMedia(`${BASE_MEDIA}${incidencia.video}`);
+        getListVideo(incidencia.video)
+        //setUrlMedia(`${BASE_MEDIA}${incidencia.video}`);
         setDescripcionVideo(incidencia.descripcion);
     }
     const openVideoCasoDialog = (incidencia: any) => {
@@ -148,7 +153,28 @@ const Incidencias: FC = (props: any) => {
         setOpenPdf(true);
     }
     console.log("ShowLoader", props)
-
+    const getListVideo=(strPath:string)=>{
+        const isVideo=strPath.includes("evidencia")&&strPath.includes(".mp4");
+        if(isVideo){
+            setListaVideos([strPath]);
+        }else{
+            const tmpListaVideo=strPath.split("|");
+            if(tmpListaVideo&&tmpListaVideo.length>0){
+                setListaVideos(tmpListaVideo)
+            }
+        }
+    }
+    const getListImages=(strPath:string)=>{
+        const isVideo=strPath.includes("evidencia")&&strPath.includes(".jpg");
+        if(isVideo){
+            setListaImages([strPath]);
+        }else{
+            const tmpListaImages=strPath.split("|");
+            if(tmpListaImages&&tmpListaImages.length>0){
+                setListaImages(tmpListaImages)
+            }
+        }
+    }
     return (
         <Grid container direction='column' >
             <div style={{ width: '100%', display: (result.isLoading ? 'block' : 'none') }}>
@@ -351,10 +377,15 @@ const Incidencias: FC = (props: any) => {
                 >
                     <DialogTitle >{"Evidencia"}</DialogTitle>
                     <DialogContent>
-                        <figure style={{ margin: 0 }}>
-                            <video width={500} height={300} src={urlMedia} controls> </video>
+                    <figure >
+                            {(listaVideos&&listaVideos.length>0)?listaVideos.map((item:string,index:number)=>{
+                               return(
+                                   item? 
+                                <video key={index} width={500} height={300} src={BASE_MEDIA+"evidencia/"+item} controls> </video>:<></>)}):<></>}
+                            
                             <figcaption><Typography>{descripcionvideo}</Typography> </figcaption>
                         </figure>
+                       
                     </DialogContent>
                     <DialogActions>
                         <Button autoFocus onClick={closeVideoDialog} color="secondary">
@@ -371,8 +402,14 @@ const Incidencias: FC = (props: any) => {
                 >
                     <DialogTitle >{"Evidencia"}</DialogTitle>
                     <DialogContent>
-                        <figure >
-                            <img src={urlMedia} style={{ margin: 0, width: '100%', height: 'auto' }} alt="Evidencia" />
+                    <figure style={{ margin: 0 }}>
+                        {(listaImages&&listaImages.length>0)?listaImages.map((item:string,index:number)=>{
+                            return(
+                                item?
+                                <img key={index} src={BASE_MEDIA+"evidencia/"+item} style={{ margin: 0, width: '100%', height: 'auto' }} alt="Evidencia" />:<></>)
+                        }):<></>}
+                        
+                            
                             <figcaption><Typography>{descripcionvideo}</Typography> </figcaption>
                         </figure>
                     </DialogContent>
