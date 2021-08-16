@@ -381,7 +381,7 @@ const Incidencias: FC = (props: any) => {
                             {(listaVideos&&listaVideos.length>0)?listaVideos.map((item:string,index:number)=>{
                                return(
                                    item? 
-                                <video key={index} width={500} height={300} src={BASE_MEDIA+"evidencia/"+item} controls> </video>:<></>)}):<></>}
+                                <video key={index} width={500} height={300} src={item.includes("evidencia")?BASE_MEDIA+item:BASE_MEDIA+"evidencia/"+item} controls> </video>:<></>)}):<></>}
                             
                             <figcaption><Typography>{descripcionvideo}</Typography> </figcaption>
                         </figure>
@@ -406,7 +406,7 @@ const Incidencias: FC = (props: any) => {
                         {(listaImages&&listaImages.length>0)?listaImages.map((item:string,index:number)=>{
                             return(
                                 item?
-                                <img key={index} src={BASE_MEDIA+"evidencia/"+item} style={{ margin: 0, width: '100%', height: 'auto' }} alt="Evidencia" />:<></>)
+                                <img key={index} src={item.includes("evidencia")?BASE_MEDIA+item:BASE_MEDIA+"evidencia/"+item} style={{ margin: 0, width: '100%', height: 'auto' }} alt="Evidencia" />:<></>)
                         }):<></>}
                         
                             
