@@ -381,7 +381,7 @@ const IncidenciaDialog: FC<any> = (props: any) => {
 
                                     </div>
                                 </div>
-                                    <MapView dir={incident.direccion} incident={incident} pos={{lat:incident.lat,lng:incident.lng}} setIncident={setIncident} />
+                                    <MapView dir={incident.direccion} incident={incident} pos={{lat:incident.lat?incident.lat:-12.04562586204593,lng:incident.lng?incident.lng:-77.04307634465705}} setIncident={setIncident} />
                             </Grid>
                         </Grid>
                     </DialogContent>
